@@ -8,13 +8,18 @@
 <title>Django Authentication Example</title>
 </head>
 <body>
-  <div  class="container">
-    <div  class="row justify-content-center align-items-center">
-      <div  class="col-12 col-sm-10 col-md-8 col-lg-6">
-      {% block main %}
-      {% endblock %}
-      </div>
+    {%if messages%}
+        {%for message in messages%}
+            {{message}}
+        {%endfor%}
+    {%endif%}
+    <div  class="container">
+        <div  class="row justify-content-center align-items-center">
+            <div  class="col-12 col-sm-10 col-md-8 col-lg-6">
+                {% block main %}
+                {% endblock %}
+            </div>
+        </div>
     </div>
-  </div>
 </body>
 </html>
