@@ -28,4 +28,4 @@ class RegisterView(View):
 
 class DashboardView(View):
     def get(self, request, *args, **kwargs):
-        return HttpResponse('Hello world')
+        return render(request, 'passwords/dashboard.html', {'title': 'Dashboard'})
