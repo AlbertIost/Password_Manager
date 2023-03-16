@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import UserRegistrationForm
 from django.views import View
@@ -26,6 +25,6 @@ class RegisterView(View):
             return redirect('dashboard')
         return render(request, 'registration/register.html', {'form': form, 'title': 'Sign up'})
 
-class DashboardView(View):
-    def get(self, request, *args, **kwargs):
-        return render(request, 'passwords/dashboard.html', {'title': 'Dashboard'})
+
+class ProfileView(View):
+    pass
