@@ -6,5 +6,5 @@ from accounts import views as accounts_views
 urlpatterns =[
     path('login/', django_auth_views.LoginView.as_view(redirect_authenticated_user=True), name='login'),
     path('logout/', django_auth_views.LogoutView.as_view(), name='logout'),
-    path('register/', accounts_views.register, name='register'),
+    path('register/', accounts_views.RegisterView.as_view(), name='register'),
 ]
