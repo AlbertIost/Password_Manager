@@ -27,4 +27,5 @@ class RegisterView(View):
 
 
 class ProfileView(View):
-    pass
+    def get(self, request, *args, **kwargs):
+        return render(request, 'accounts/profile.html', {'title': 'Profile'})
