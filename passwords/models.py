@@ -10,36 +10,32 @@ from .encryption_util import encrypt
 
 
 # Create your models here.
-
-
-class PasswordCategory(models.Model):
-    user = models.ForeignKey(
-        to=User,
-        verbose_name='User',
-        on_delete=models.CASCADE,
-    )
-    title = models.TextField(
-        verbose_name='Title of category'
-    )
-
-    class Meta:
-        verbose_name = 'Password category'
-
-
 class UserPassword(models.Model):
     user = models.ForeignKey(
         to=User,
         verbose_name='User',
         on_delete=models.CASCADE,
     )
-    category = models.ForeignKey(
-        to=PasswordCategory,
-        verbose_name='Password category',
-        on_delete=models.CASCADE,
-    )
     encrypted_password = models.TextField(
         verbose_name='Encrypted password'
     )
+    website_name = models.TextField(
+        verbose_name='Name of website',
+        null=True
+    )
+    website_link = models.TextField(
+        verbose_name='URL to website',
+        null=True
+    )
+    website_username = models.TextField(
+        verbose_name='Login on the website',
+        null=True
+    )
+    website_notes = models.TextField(
+        verbose_name='Website notes',
+        null=True
+    )
+
 
     class Meta:
         verbose_name = 'User password'
@@ -47,7 +43,7 @@ class UserPassword(models.Model):
 
 # method for indicating where to load avatars
 def upload_to(instance, filename):
-    return 'avatars/%s' % filename
+    return f'avatars/{filename}'
 
 
 class Profile(models.Model):
