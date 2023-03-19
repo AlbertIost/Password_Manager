@@ -2,13 +2,19 @@
 {% load static %}
 {% block main %}
     <div  class="container pt-5">
-        <div  class="row justify-content-center align-items-center">
-            <div class="col-3">
-                <img src="{% static user.avatar %}" alt="">
-            </div>
-            <div  class="col-9">
+        <div  class="row justify-content-center">
+            {% if passwords %}
 
-            </div>
+                {% for password in passwords %}
+
+                    <div class="col-6 col-lg-4 d-flex justify-content-center mb-3">
+                        <a href="{% url 'view_password' pass_id=password.id %}" class="btn btn-block btn-dark">
+                            <h3 class="text-uppercase text-break">{{ password.website_name }}</h3>
+                        </a>
+                    </div>
+
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 {% endblock %}
