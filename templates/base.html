@@ -13,16 +13,16 @@
         <div class="container">
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
+                    <li class="nav-item {% if active == 'dashboard'%}active{% endif %}">
                         <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {% if active == 'profile'%}active{% endif %}">
                         <a class="nav-link" href="{% url 'profile' %}">Profile</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {% if active == 'add password'%}active{% endif %}">
                         <a class="nav-link" href="{% url 'add_password' %}">Add password</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item {% if active == 'generate password'%}active{% endif %}">
                         <a class="nav-link" href="{% url 'add_password' %}">Generate password</a>
                     </li>
                     <li class="nav-item">

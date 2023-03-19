@@ -39,4 +39,11 @@ class RegisterView(CreateView):
 
 class ProfileView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'accounts/profile.html', {'title': 'Profile'})
+        return render(
+            request,
+            'accounts/profile.html',
+            {
+                'title': 'Profile',
+                'active': 'profile'
+            }
+        )

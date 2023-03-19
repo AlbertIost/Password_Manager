@@ -15,7 +15,8 @@ class AddPasswordView(View):
             'passwords/add_new.html',
             {
                 'title': 'Add new password',
-                'form': form
+                'form': form,
+                'active': 'add password'
             }
         )
 
@@ -25,7 +26,8 @@ class AddPasswordView(View):
             'passwords/add_new.html',
             {
                 'title': 'Add new password',
-                'form': AddPasswordForm(user=request.user)
+                'form': AddPasswordForm(user=request.user),
+                'active': 'add password'
             }
         )
 
@@ -36,5 +38,6 @@ class DashboardView(View):
             'passwords/dashboard.html',
             {
                 'title': 'Dashboard',
+                'active': 'dashboard'
             }
         )
