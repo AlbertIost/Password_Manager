@@ -6,8 +6,6 @@ from django.dispatch import receiver
 from cryptography.fernet import Fernet
 from django.utils.safestring import mark_safe
 
-from .encryption_util import encrypt
-
 
 # Create your models here.
 class UserPassword(models.Model):
@@ -16,8 +14,8 @@ class UserPassword(models.Model):
         verbose_name='User',
         on_delete=models.CASCADE,
     )
-    encrypted_password = models.TextField(
-        verbose_name='Encrypted password'
+    website_password = models.TextField(
+        verbose_name='Website password'
     )
     website_name = models.TextField(
         verbose_name='Name of website',
@@ -52,8 +50,9 @@ class Profile(models.Model):
         verbose_name='User',
         on_delete=models.CASCADE,
     )
-    secret_key = models.TextField(
-        verbose_name='Secret key for decryption'
+    master_password = models.TextField(
+        verbose_name='Master password',
+        null=True
     )
     avatar = models.ImageField(
         verbose_name='Avatar',
@@ -75,16 +74,12 @@ class Profile(models.Model):
 
 
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
-        secret_key = Fernet.generate_key()
-        print(f'{instance}: {secret_key}')
-        Profile.objects.create(user=instance, secret_key=encrypt(secret_key))
-
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
+        Profile.objects.create(user=instance)
     try:
         instance.profile.save()
     except ObjectDoesNotExist:
         Profile.objects.create(user=instance)
+
+

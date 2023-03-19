@@ -3,9 +3,10 @@ from django.contrib.auth.decorators import login_required
 from django.urls import path, include
 from django.views.generic.base import RedirectView
 
-from passwords import views as passwords_views
+from passwords.views import *
 
 urlpatterns =[
-    path('dashboard/', login_required(passwords_views.DashboardView.as_view()), name='dashboard'),
-    path('', RedirectView.as_view(url='dashboard/'))
+    path('dashboard/', login_required(DashboardView.as_view()), name='dashboard'),
+    path('', RedirectView.as_view(url='dashboard/')),
+    path('add/password/', AddPasswordView.as_view(), name='add_password'),
 ]

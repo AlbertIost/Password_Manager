@@ -18,13 +18,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),
     path('', include('passwords.urls')),
-
 ]
 
 if settings.DEBUG:
