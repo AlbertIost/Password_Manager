@@ -1,10 +1,39 @@
 {% extends  'base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
 {% load static %}
 {% block main %}
-<div class="container">
-    <div class="row">
-        <div class="col">
-            knhkjugd
+<div class="container pt-5">
+    <div  class="row justify-content-center">
+        <div class="col-10">
+            <form class="card d-block" method="POST">
+                {% csrf_token %}
+                <div class="card-body">
+                    <p class="text-center lead font-weight-normal pt-2 pb-2">
+                        <span class="text-info">Username:</span>
+                        <span class="">{{ user.username }}</span>
+                    </p>
+                    <p class="text-center lead font-weight-normal pt-2 pb-2">
+                        <span class="text-info">Email:</span>
+                        <span class="">{{ user.email }}</span>
+                    </p>
+                    <p class="text-center lead font-weight-normal pt-2 pb-2">
+                        <span class="text-info">Account created on:</span>
+                        <span class="">{{ user.date_joined|date:"F d, Y" }}</span>
+                    </p>
+
+                    <div class="col-12 col-md-8 col-lg-6 ml-auto mr-auto">
+                        {{ form|crispy }}
+
+                        <div class="input-group">
+                            <button class="btn btn-info form-control" type="submit">Change</button>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-8 col-lg-6 ml-auto mr-auto mt-4">
+                        <a href="{% url 'delete_profile' %}" class="btn btn-danger btn-block btn-lg btn-big">Delete account</a>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

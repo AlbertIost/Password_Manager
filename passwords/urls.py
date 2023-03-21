@@ -9,5 +9,6 @@ urlpatterns =[
     path('dashboard/', login_required(DashboardView.as_view()), name='dashboard'),
     path('', RedirectView.as_view(url='dashboard/')),
     path('add/password/', AddPasswordView.as_view(), name='add_password'),
-    path('password/<int:pass_id>', PasswordView.as_view(), name='view_password')
+    path('password/<int:pass_id>', PasswordView.as_view(), name='view_password'),
+    path('password/delete/<int:pass_id>', DeletePasswordView.as_view(), name='delete_password'),
 ]

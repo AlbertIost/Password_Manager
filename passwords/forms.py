@@ -30,3 +30,16 @@ class AddPasswordForm(forms.ModelForm):
     class Meta:
         model = UserPassword
         fields = ['website_name', 'website_link', 'website_username', 'website_password', 'website_notes', 'master_password']
+
+class DeletePasswordForm(forms.ModelForm):
+    master_password = forms.CharField(widget=forms.PasswordInput(), label='Master password')
+    def clean(self):
+        correct_master = self.user.profile.master_password
+        if not check_password(self.cleaned_data['master_password'], correct_master):
+            raise ValidationError('Invalid master password.')
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(DeletePasswordForm, self).__init__(*args, **kwargs)
+    class Meta:
+        model = UserPassword
+        fields = ['master_password']
