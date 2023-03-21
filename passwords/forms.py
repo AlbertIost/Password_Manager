@@ -43,3 +43,14 @@ class DeletePasswordForm(forms.ModelForm):
     class Meta:
         model = UserPassword
         fields = ['master_password']
+
+class PasswordViewForm(forms.Form):
+    master_password = forms.CharField(widget=forms.PasswordInput(), label='')
+    def clean(self):
+        correct_master = self.profile.master_password
+        if not check_password(self.cleaned_data['master_password'], correct_master):
+            raise ValidationError('Invalid master password.')
+
+    def __init__(self, *args, **kwargs):
+        self.profile = kwargs.pop('profile', None)
+        super(PasswordViewForm, self).__init__(*args, **kwargs)

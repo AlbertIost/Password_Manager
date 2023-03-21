@@ -1,10 +1,10 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.hashers import check_password
 
-from passwords.forms import AddPasswordForm, DeletePasswordForm
+from passwords.forms import AddPasswordForm, DeletePasswordForm, PasswordViewForm
 from passwords.models import UserPassword, Profile
 
 class AddPasswordView(LoginRequiredMixin, View):
@@ -49,11 +49,13 @@ class DashboardView(LoginRequiredMixin, View):
             }
         )
 
-class PasswordView(LoginRequiredMixin, View):
+class PasswordView(UserPassesTestMixin, LoginRequiredMixin, View):
+    def test_func(self):
+        pass_id = self.kwargs['pass_id']
+        return UserPassword.objects.get(id=pass_id).user == self.request.user
     def post(self, request, pass_id, *args, **kwargs):
-        form_master = request.POST['master_password']
-        correct_master = Profile.objects.get(user=request.user).master_password
-        if check_password(form_master, correct_master):
+        form = PasswordViewForm(request.POST, profile=request.user.profile)
+        if form.is_valid():
             return render(
                 request,
                 'passwords/password.html',
@@ -72,7 +74,7 @@ class PasswordView(LoginRequiredMixin, View):
                 'title': 'Password',
                 'active': 'dashboard',
                 'password': UserPassword.objects.get(id=pass_id),
-                'master_check': False
+                'form': form,
             }
         )
 
@@ -85,10 +87,14 @@ class PasswordView(LoginRequiredMixin, View):
                 'title': 'Password',
                 'active': 'dashboard',
                 'password': UserPassword.objects.get(id=pass_id),
+                'form': PasswordViewForm(profile=request.user.profile)
             }
         )
 
-class DeletePasswordView(LoginRequiredMixin, View):
+class DeletePasswordView(UserPassesTestMixin, LoginRequiredMixin, View):
+    def test_func(self):
+        pass_id = self.kwargs['pass_id']
+        return UserPassword.objects.get(id=pass_id).user == self.request.user
     def post(self, request, pass_id, *args, **kwargs):
         form = DeletePasswordForm(request.POST, user=request.user)
         if form.is_valid():
