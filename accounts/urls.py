@@ -7,5 +7,6 @@ urlpatterns =[
     path('logout/', django_auth_views.LogoutView.as_view(), name='logout'),
     path('register/', accounts_views.RegisterView.as_view(), name='register'),
     path('profile/', accounts_views.ProfileView.as_view(), name='profile'),
-    path('delete/', accounts_views.DeleteProfileView.as_view(), name='delete_profile')
+    path('delete/', accounts_views.DeleteProfileView.as_view(), name='delete_profile'),
+    path('actions/', accounts_views.ActionLogsView.as_view(), name='action_logs')
 ]
