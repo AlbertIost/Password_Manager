@@ -14,6 +14,12 @@
                     </div>
 
                 {% endfor %}
+            {% else %}
+
+                <div class="col">
+                    <a href="{% url 'add_password' %}">Add the first password</a>
+                </div>
+
             {% endif %}
         </div>
     </div>
