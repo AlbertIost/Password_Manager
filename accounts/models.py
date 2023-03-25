@@ -1,11 +1,13 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+import passwords.models
+
 
 class ActionLogs(models.Model):
     user = models.ForeignKey(
-        to=User,
-        verbose_name='User',
+        to=passwords.models.Profile,
+        verbose_name='Profile',
         on_delete=models.CASCADE,
     )
     action = models.TextField(
