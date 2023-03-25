@@ -75,7 +75,10 @@ class Profile(models.Model):
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        profile = Profile.objects.create(user=instance)
+        # for profile that created from python manage.py createsuperuser
+        if profile.master_password is None:
+            profile.master_password = profile.user.password
     try:
         instance.profile.save()
     except ObjectDoesNotExist:
