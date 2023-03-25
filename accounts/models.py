@@ -5,7 +5,7 @@ import passwords.models
 
 
 class ActionLogs(models.Model):
-    user = models.ForeignKey(
+    profile = models.ForeignKey(
         to=passwords.models.Profile,
         verbose_name='Profile',
         on_delete=models.CASCADE,
