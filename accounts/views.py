@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import UserRegistrationForm, ChangeMasterPasswordForm, DeleteUserForm
 from django.views.generic.edit import CreateView
@@ -35,6 +36,7 @@ class RegisterView(CreateView):
             user.save()
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
+            login(request, user)
             return redirect('dashboard')
         return render(request, 'registration/register.html', {'form': form, 'title': 'Sign up'})
 
@@ -75,9 +77,9 @@ class DeleteProfileView(LoginRequiredMixin, View):
         if form.is_valid():
             deleted, rows = request.user.delete()
             if deleted:
-                message = "The password has been deleted."
+                message = "The profile has been deleted."
             else:
-                message = "The password hasn't been deleted."
+                message = "The profile hasn't been deleted."
             messages.success(request, message)
             return redirect('login')
 
@@ -100,5 +102,16 @@ class DeleteProfileView(LoginRequiredMixin, View):
                 'title': 'Delete account',
                 'active': 'profile',
                 'form': DeleteUserForm(profile=request.user.profile)
+            }
+        )
+
+class ActionLogsView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        return render(
+            request,
+            'accounts/action_logs.html',
+            {
+                'title': 'Action logs',
+                'active': 'action logs'
             }
         )
