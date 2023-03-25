@@ -3,7 +3,7 @@ from django.db import models
 
 
 class ActionLogs(models.Model):
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         to=User,
         verbose_name='User',
         on_delete=models.CASCADE,
