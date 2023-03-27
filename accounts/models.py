@@ -17,6 +17,9 @@ class ActionLogs(models.Model):
         verbose_name='Note for the action',
         null=True
     )
+    ip_address = models.TextField(
+        verbose_name='IP address from which the action was performed'
+    )
     danger_level = models.PositiveSmallIntegerField(
         verbose_name='The level of danger of the action',
         default=0
