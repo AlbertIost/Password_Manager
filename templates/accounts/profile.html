@@ -6,7 +6,7 @@
 <div class="container pt-5">
     <div  class="row justify-content-center">
         <div class="col-10">
-            <form class="card d-block" method="POST">
+            <div class="card d-block">
                 {% csrf_token %}
                 <div class="card-body">
                     <p class="text-center lead font-weight-normal pt-2 pb-2">
@@ -21,19 +21,17 @@
                         <span class="text-info">Account created on:</span>
                         <span class="">{{ user.date_joined|date:"F d, Y" }}</span>
                     </p>
-
-                    <div class="col-12 col-md-8 col-lg-6 ml-auto mr-auto">
-                        {{ form|crispy }}
-
-                        <div class="input-group">
-                            <button class="btn btn-info form-control" type="submit">Change</button>
-                        </div>
+                    <div class="col-12 col-md-8 col-lg-6 ml-auto mr-auto mt-4">
+                        <a href="{% url 'change_password' %}" class="btn btn-info btn-block">Change account password</a>
                     </div>
                     <div class="col-12 col-md-8 col-lg-6 ml-auto mr-auto mt-4">
-                        <a href="{% url 'delete_profile' %}" class="btn btn-danger btn-block btn-lg btn-big">Delete account</a>
+                        <a href="{% url 'change_master' %}" class="btn btn-info btn-block">Change master password</a>
+                    </div>
+                    <div class="col-12 col-md-8 col-lg-6 ml-auto mr-auto mt-4">
+                        <a href="{% url 'delete_profile' %}" class="btn btn-danger btn-block">Delete account</a>
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
