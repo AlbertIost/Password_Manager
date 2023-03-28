@@ -19,7 +19,7 @@ class AddPasswordView(LoginRequiredMixin, View):
             ActionLog.objects.create(
                 profile=request.user.profile,
                 action='Add password.',
-                note=f'Password for {form.instance.website_link}',
+                note=f'Password for {form.instance.website_name}',
                 ip_address=get_client_ip(request),
 
             )
@@ -73,7 +73,7 @@ class PasswordView(UserPassesTestMixin, LoginRequiredMixin, View):
             ActionLog.objects.create(
                 profile=request.user.profile,
                 action='The password was viewed using the master password.',
-                note=f'password_id:{pass_id}',
+                note=f'Password for {UserPassword.objects.get(id=pass_id).website_name}',
                 ip_address=get_client_ip(request)
             )
             return render(
@@ -119,14 +119,14 @@ class DeletePasswordView(UserPassesTestMixin, LoginRequiredMixin, View):
     def post(self, request, pass_id, *args, **kwargs):
         form = DeletePasswordForm(request.POST, user=request.user)
         if form.is_valid():
-            website_link = UserPassword.objects.filter(id=pass_id).get().website_link
+            website_name = UserPassword.objects.filter(id=pass_id).get().website_name
             deleted, rows = UserPassword.objects.filter(id=pass_id).delete()
             if deleted:
                 message = "The password has been deleted."
                 ActionLog.objects.create(
                     profile=request.user.profile,
                     action='The password has been deleted.',
-                    note=f'Password for {website_link}',
+                    note=f'Password for {website_name}',
                     ip_address=get_client_ip(request)
                 )
             else:
