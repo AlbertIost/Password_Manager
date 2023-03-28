@@ -48,6 +48,18 @@ class RegisterView(CreateView):
 
 
 class ProfileView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        return render(
+            request,
+            'accounts/profile.html',
+            {
+                'title': 'Profile',
+                'active': 'profile'
+            }
+        )
+
+
+class ChangeMasterPasswordView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         form = ChangeMasterPasswordForm(request.POST, profile=request.user.profile, instance=request.user.profile)
         if form.is_valid():
@@ -76,11 +88,11 @@ class ProfileView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         return render(
             request,
-            'accounts/profile.html',
+            'registration/change_password.html',
             {
-                'title': 'Profile',
+                'title': 'Change master',
                 'active': 'profile',
-                'form': ChangeMasterPasswordForm(profile=request.user.profile, instance=request.user.profile)
+                'form': ChangeMasterPasswordForm()
             }
         )
 
@@ -128,14 +140,3 @@ class ActionLogView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return ActionLog.objects.filter(profile=self.request.user.profile).order_by('-execution_at')
-
-    # def get(self, request, *args, **kwargs):
-    #     return render(
-    #         request,
-    #         'accounts/action_logs.html',
-    #         {
-    #             'title': 'Action logs',
-    #             'active': 'action logs',
-    #             'action_logs': ActionLog.objects.filter(profile=request.user.profile)
-    #         }
-    #     )
