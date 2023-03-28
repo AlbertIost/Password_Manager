@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from passwords.models import Profile
 from passwords.utils import get_client_ip
 
-class ActionLogs(models.Model):
+class ActionLog(models.Model):
     profile = models.ForeignKey(
         to=Profile,
         verbose_name='Profile',
@@ -35,7 +35,7 @@ class ActionLogs(models.Model):
 
 @receiver(user_logged_in, sender=User)
 def user_logged_in_action_log(sender, request, user, **kwargs):
-    ActionLogs.objects.create(
+    ActionLog.objects.create(
         profile=user.profile,
         action='Logged in',
         ip_address=get_client_ip(request)
@@ -44,7 +44,7 @@ def user_logged_in_action_log(sender, request, user, **kwargs):
 
 @receiver(user_logged_out, sender=User)
 def user_logged_out_action_log(sender, request, user, **kwargs):
-    ActionLogs.objects.create(
+    ActionLog.objects.create(
         profile=user.profile,
         action='Logged out',
         ip_address=get_client_ip(request)
@@ -52,10 +52,10 @@ def user_logged_out_action_log(sender, request, user, **kwargs):
 
 
 @receiver(user_login_failed)
-def user_login_failed_action_log(sender,credentials,request,**kwargs):
+def user_login_failed_action_log(sender, credentials, request, **kwargs):
     try:
         profile = Profile.objects.get(user__username=credentials['username'])
-        ActionLogs.objects.create(
+        ActionLog.objects.create(
             profile=profile,
             action='Failed to log in',
             ip_address=get_client_ip(request)

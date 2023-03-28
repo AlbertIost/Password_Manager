@@ -3,11 +3,17 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponse, HttpResponseRedirect
+
+from passwords.utils import get_client_ip
 from .forms import UserRegistrationForm, ChangeMasterPasswordForm, DeleteUserForm
 from django.views.generic.edit import CreateView
+from django.views.generic.list import ListView
 from django.views import View
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from .models import ActionLog
+
 
 # Create your views here.
 
@@ -47,6 +53,14 @@ class ProfileView(LoginRequiredMixin, View):
         if form.is_valid():
             form.save()
             messages.success(request, 'The master password has been updated.')
+
+            ActionLog.objects.create(
+                profile=request.user.profile,
+                action='The master password has been changed',
+                ip_address=get_client_ip(request),
+                danger_level=1
+            )
+
             return redirect('profile')
 
         return render(
@@ -59,7 +73,6 @@ class ProfileView(LoginRequiredMixin, View):
             }
         )
 
-
     def get(self, request, *args, **kwargs):
         return render(
             request,
@@ -70,6 +83,7 @@ class ProfileView(LoginRequiredMixin, View):
                 'form': ChangeMasterPasswordForm(profile=request.user.profile, instance=request.user.profile)
             }
         )
+
 
 class DeleteProfileView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
@@ -93,7 +107,6 @@ class DeleteProfileView(LoginRequiredMixin, View):
             }
         )
 
-
     def get(self, request, *args, **kwargs):
         return render(
             request,
@@ -105,13 +118,24 @@ class DeleteProfileView(LoginRequiredMixin, View):
             }
         )
 
-class ActionLogsView(LoginRequiredMixin, View):
-    def get(self, request, *args, **kwargs):
-        return render(
-            request,
-            'accounts/action_logs.html',
-            {
-                'title': 'Action logs',
-                'active': 'action logs'
-            }
-        )
+
+class ActionLogView(LoginRequiredMixin, ListView):
+    model = ActionLog
+    paginate_by = 100
+    template_name = 'accounts/action_logs.html'
+    context_object_name = 'action_logs'
+    extra_context = {'title': 'Action logs', 'active': 'action logs', 'n': range(100)}
+
+    def get_queryset(self):
+        return ActionLog.objects.filter(profile=self.request.user.profile).order_by('-execution_at')
+
+    # def get(self, request, *args, **kwargs):
+    #     return render(
+    #         request,
+    #         'accounts/action_logs.html',
+    #         {
+    #             'title': 'Action logs',
+    #             'active': 'action logs',
+    #             'action_logs': ActionLog.objects.filter(profile=request.user.profile)
+    #         }
+    #     )

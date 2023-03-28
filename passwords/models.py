@@ -6,6 +6,9 @@ from django.dispatch import receiver
 from django.utils.safestring import mark_safe
 
 
+# from accounts.models import ActionLogs
+
+
 # Create your models here.
 class UserPassword(models.Model):
     user = models.ForeignKey(
@@ -83,5 +86,3 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
         instance.profile.save()
     except ObjectDoesNotExist:
         Profile.objects.create(user=instance)
-
-

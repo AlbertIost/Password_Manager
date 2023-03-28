@@ -1,0 +1,66 @@
+{% extends  'base.html' %}
+{% load static %}
+{% block main %}
+<div class="container pt-5">
+    <div  class="row justify-content-center">
+        <div class="col-12">
+            {% if action_logs %}
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Action</th>
+                            <th scope="col">Note</th>
+                            <th scope="col">IP address</th>
+                            <th scope="col">Date & time</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-striped">
+                        {% for action_log in action_logs %}
+
+                            <tr class="{% if action_log.danger_level %}bg-danger text-light{% endif %}">
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ action_log.action }}</td>
+                                <td>
+                                    {%  if action_log.note == None %}
+                                        -
+                                    {% else %}
+                                        {{ action_log.note }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ action_log.ip_address }}</td>
+                                <td>{{ action_log.execution_at|date:"d.m.Y H:i" }}</td>
+                            </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+
+            {% if is_paginated %}
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        {% if page_obj.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                        {% else %}
+                            <li class="page-item disabled"><a class="page-link" href="#"><span>&laquo;</span></a></li>
+                        {% endif %}
+                        {% for i in paginator.page_range %}
+                            {% if page_obj.number == i %}
+                                <li class="page-item active"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if page_obj.has_next %}
+                            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                        {% else %}
+                            <li class="page-item disabled"><a class="page-link" href="#"><span>&raquo;</span></a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
