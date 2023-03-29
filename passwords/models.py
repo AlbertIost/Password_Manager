@@ -6,9 +6,6 @@ from django.dispatch import receiver
 from django.utils.safestring import mark_safe
 
 
-# from accounts.models import ActionLogs
-
-
 # Create your models here.
 class UserPassword(models.Model):
     user = models.ForeignKey(
@@ -36,7 +33,6 @@ class UserPassword(models.Model):
         null=True
     )
 
-
     class Meta:
         verbose_name = 'User password'
 
@@ -56,23 +52,6 @@ class Profile(models.Model):
         verbose_name='Master password',
         null=True
     )
-    avatar = models.ImageField(
-        verbose_name='Avatar',
-        upload_to=upload_to,
-        null=True,
-        blank=True
-    )
-
-    def get_avatar(self):
-        if not self.avatar:
-            return '/static/images/avatar.svg'
-        return self.avatar.url
-
-    # method to create a fake table field in read only mode
-    def avatar_tag(self):
-        return mark_safe(f'<img src="{self.get_avatar()}" width="50" height="50" />')
-
-    avatar_tag.short_description = 'Avatar'
 
 
 @receiver(post_save, sender=User)

@@ -7,9 +7,8 @@ from passwords.models import Profile, UserPassword
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'avatar_tag', 'master_password')
-    readonly_fields = ['avatar_tag']
-    fields = ('user', 'avatar_tag', 'master_password')
+    list_display = ('user', 'master_password')
+    fields = ('user', 'master_password')
 
 
 @admin.register(UserPassword)
